@@ -1,0 +1,6 @@
+{
+  "name": "The Paws Store",
+  "description": "An ultra-premium e-commerce experience for curated pet goods, featuring customer dashboards, admin panels, interactive catalog with filters, rich product detail views, cart and checkout flows.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

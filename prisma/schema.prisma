@@ -1,0 +1,307 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  CUSTOMER
+  PARTNER
+  ADMIN
+}
+
+enum ApprovalStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  REJECTED
+  DRAFT
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  name         String?
+  username     String?
+  password     String?
+  role         Role          @default(CUSTOMER)
+  phone        String?
+  membership   String?       @default("Standard")
+  bio          String?
+  avatar       String?
+  tokenVersion Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  partnerStore PartnerStore?
+  addresses    Address[]
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  label     String
+  street    String
+  city      String
+  state     String
+  zip       String
+  country   String   @default("United States")
+  isDefault Boolean  @default(false)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PartnerStore {
+  id              String             @id @default(cuid())
+  businessName    String
+  ownerId         String             @unique
+  owner           User               @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  address         String
+  lat             Float?
+  lng             Float?
+  logoUrl         String?
+  taxId           String?
+  rejectionReason String?
+  approvalStatus  ApprovalStatus     @default(PENDING)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  inventories           PartnerInventory[]
+  fulfillments          Fulfillment[]
+  razorpayAccountId     String?               @unique
+  razorpayAccountStatus RazorpayAccountStatus @default(NOT_STARTED)
+
+  @@index([lat, lng])
+}
+
+model PartnerInventory {
+  id                 String       @id @default(cuid())
+  storeId            String
+  store              PartnerStore @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  productId          String
+  product            Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  price              Float
+  stockQuantity      Int          @default(0)
+  shelfImageUrl      String?
+  cloudinaryPublicId String?
+  createdAt          DateTime     @default(now())
+  analytics          InventoryAnalytics[]
+  engagementScores   EngagementScore[]
+}
+
+model InventoryAnalytics {
+  id                 String           @id @default(cuid())
+  partnerInventoryId String
+  partnerInventory   PartnerInventory @relation(fields: [partnerInventoryId], references: [id], onDelete: Cascade)
+  date               DateTime         @default(now())
+  clicks             Int              @default(0)
+  addToCarts         Int              @default(0)
+  conversions        Int              @default(0)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@unique([partnerInventoryId, date])
+  @@index([date])
+}
+
+model EngagementScore {
+  id                 String           @id @default(cuid())
+  partnerInventoryId String
+  partnerInventory   PartnerInventory @relation(fields: [partnerInventoryId], references: [id], onDelete: Cascade)
+  weekStart          DateTime
+  score              Float
+  rank               Int?
+  createdAt          DateTime         @default(now())
+
+  @@unique([partnerInventoryId, weekStart])
+  @@index([weekStart])
+}
+
+model Product {
+  id              String       @id
+  name            String
+  description     String
+  price           Float
+  rating          Float
+  reviewsCount    Int
+  image           String
+  category        String
+  secondaryImages String[]
+  sizes           String[]
+  colors          Json
+  tags            String[]
+  brand           String
+  inStock         Boolean      @default(true)
+  searchVector    Unsupported("tsvector")? @default(dbgenerated("to_tsvector('english', coalesce(name, '') || ' ' || coalesce(brand, '') || ' ' || coalesce(category, '') || ' ' || coalesce(array_to_string(tags, ' '), ''))"))
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  reviews         Review[]
+  orderItems      OrderItem[]
+  inventories     PartnerInventory[]
+}
+
+model Order {
+  id         String      @id
+  date       String
+  status     String      @default("Processing")
+  total      Float
+  image      String
+  userId     String
+  couponCode String?
+  addressId  String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  items             OrderItem[]
+  fulfillments      Fulfillment[]
+  razorpayOrderId   String?       @unique
+  razorpayPaymentId String?       @unique
+  razorpaySignature String?
+  paymentStatus     PaymentStatus @default(PENDING_PAYMENT)
+  paidAt            DateTime?
+  refundedAt        DateTime?
+  currency          String        @default("INR")
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  name      String
+  quantity  Int
+  price     Float
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model PetProfile {
+  id              String   @id
+  name            String
+  type            String // "dog" | "cat"
+  breed           String
+  age             String
+  weight          String
+  image           String
+  bio             String
+  recommendations String[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  timestamp DateTime @default(now())
+  action    String
+  user      String
+  details   String
+}
+
+model Coupon {
+  code      String   @id
+  percent   Float
+  isActive  Boolean  @default(true)
+  maxUses   Int      @default(100)
+  usedCount Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StockNotification {
+  id           String   @id
+  productId    String
+  productName  String
+  productPrice Float
+  productImage String
+  email        String
+  createdAt    String
+}
+
+model Review {
+  id             String   @id
+  productId      String
+  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  rating         Int
+  title          String
+  author         String
+  companionName  String?
+  companionBreed String?
+  comment        String
+  date           String
+  verified       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+}
+
+enum FulfillmentStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+model Fulfillment {
+  id         String            @id @default(cuid())
+  orderId    String
+  order      Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  storeId    String
+  store      PartnerStore      @relation(fields: [storeId], references: [id])
+  status     FulfillmentStatus @default(PENDING)
+  items      Json              // Array of { productId, name, price, quantity, inventoryId }
+  subtotal   Float
+  tax        Float
+  total      Float
+  notes      String?           // Optional: partner-specific pickup notes
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  readyAt    DateTime?         // Timestamp when partner marks as ready
+  pickedUpAt DateTime?         // Timestamp when customer confirms pickup
+
+  @@index([orderId])
+  @@index([storeId])
+  @@index([status])
+}
+
+enum RazorpayAccountStatus {
+  NOT_STARTED
+  PENDING
+  ACTIVE
+  SUSPENDED
+  DISABLED
+}
+
+enum PaymentStatus {
+  PENDING_PAYMENT
+  PAID
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+model RazorpayWebhookLog {
+  id           String   @id @default(cuid())
+  eventId      String   @unique
+  event        String
+  payload      Json
+  processedAt  DateTime @default(now())
+  status       String   // "SUCCESS" | "FAILED" | "IGNORED"
+  errorMessage String?
+
+  @@index([eventId])
+  @@index([event])
+}
+
+model PlatformSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String   // JSON string or simple string
+  description String?
+  updatedBy   String?  // userId of the admin who last updated
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+}
+
+
+
+
+

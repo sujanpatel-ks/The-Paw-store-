@@ -1,0 +1,161 @@
+{
+  "info": {
+    "name": "The Paws Store - Enterprise API Suite",
+    "description": "Ready-to-import Postman suite representing white-glove pet boutique transaction checkouts, companion styling queries, coupons, secure uploads, and audit records.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Security & Auth",
+      "item": [
+        {
+          "name": "Rotate Authentication Tokens",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"token-sarah-rotation-928\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/token",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "token"]
+            }
+          }
+        },
+        {
+          "name": "Retrieve Security Audit Logs",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/audit-logs",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "audit-logs"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Profiles",
+      "item": [
+        {
+          "name": "Retrieve Curator Profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/user/profile",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "user", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Update Contact Credentials",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"Sarah Verified\",\n  \"phone\": \"+1 (555) 999-8888\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/user/profile",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "user", "profile"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Addresses & Wishlists",
+      "item": [
+        {
+          "name": "Retrieve Shipping Destinations",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/user/addresses",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "user", "addresses"]
+            }
+          }
+        },
+        {
+          "name": "Register New Address",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"label\": \"Manhattan Loft\",\n  \"street\": \"400 Broadway, Apt 2C\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"zip\": \"10013\",\n  \"country\": \"United States\",\n  \"isDefault\": true\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/user/addresses",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "user", "addresses"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Order Lifecycles",
+      "item": [
+        {
+          "name": "Submit Checkout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"cloud-bed\",\n      \"name\": \"Cloud Orthopedic Bed\",\n      \"quantity\": 1,\n      \"price\": 189.00\n    }\n  ],\n  \"addressId\": \"addr-1\",\n  \"couponCode\": \"ELEVATE10\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/orders",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "orders"]
+            }
+          }
+        },
+        {
+          "name": "Generate Plain-text Invoice",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/orders/ORD-9281-XC/invoice",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "orders", "ORD-9281-XC", "invoice"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

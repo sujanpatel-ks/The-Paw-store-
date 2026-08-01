@@ -1,0 +1,265 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "The Paws Store - White-Glove Pet E-commerce REST API",
+    "description": "Production-grade, enterprise API specification for high-end pet product cataloging, companion physical-space synergy profiles, secure checkouts, inventory thresholds, complete order timeline management, coupons, and administrative audits.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Bespoke Curation Desk",
+      "email": "curator.desk@thepawsstore.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development Container Ingress"
+    }
+  ],
+  "paths": {
+    "/api/auth/token": {
+      "post": {
+        "summary": "Rotate Authentication Tokens",
+        "description": "Exchanges a valid refresh token for a rotated access and refresh token pair to prevent hijack replay attacks.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "refreshToken": {
+                    "type": "string",
+                    "example": "token-sarah-rotation-928"
+                  }
+                },
+                "required": ["refreshToken"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Rotation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": { "type": "string" },
+                    "refreshToken": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Revoked or Invalid Token (Triggers Security Alarm)"
+          }
+        }
+      }
+    },
+    "/api/user/profile": {
+      "get": {
+        "summary": "Retrieve User Profile",
+        "responses": {
+          "200": {
+            "description": "Returns verified curator profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Contact Credentials",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "email": { "type": "string" },
+                  "phone": { "type": "string" },
+                  "bio": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile successfully synchronized"
+          }
+        }
+      }
+    },
+    "/api/user/pets": {
+      "get": {
+        "summary": "List Companion Profiles",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/PetProfile" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Register New Companion Profile",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PetProfileInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Companion registered successfully"
+          }
+        }
+      }
+    },
+    "/api/user/addresses": {
+      "get": {
+        "summary": "List Shipping Destinations",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Address" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inventory": {
+      "get": {
+        "summary": "Get Product Stock Levels",
+        "responses": {
+          "200": {
+            "description": "Key-value pair map of ID to quantity in-store"
+          }
+        }
+      }
+    },
+    "/api/orders": {
+      "get": {
+        "summary": "Retrieve Order List",
+        "responses": {
+          "200": {
+            "description": "Array of client orders"
+          }
+        }
+      },
+      "post": {
+        "summary": "Submit Curated Purchase",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "productId": { "type": "string" },
+                        "name": { "type": "string" },
+                        "quantity": { "type": "integer" },
+                        "price": { "type": "number" }
+                      }
+                    }
+                  },
+                  "addressId": { "type": "string" },
+                  "couponCode": { "type": "string" }
+                },
+                "required": ["items"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Purchase transaction logged and tracking initialized"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "username": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "membership": { "type": "string" },
+          "bio": { "type": "string" },
+          "avatar": { "type": "string" }
+        }
+      },
+      "PetProfile": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "type": { "type": "string", "enum": ["dog", "cat"] },
+          "breed": { "type": "string" },
+          "age": { "type": "string" },
+          "weight": { "type": "string" },
+          "image": { "type": "string" },
+          "bio": { "type": "string" },
+          "recommendations": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "PetProfileInput": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string", "enum": ["dog", "cat"] },
+          "breed": { "type": "string" },
+          "age": { "type": "string" },
+          "weight": { "type": "string" },
+          "bio": { "type": "string" }
+        },
+        "required": ["name", "type"]
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "street": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "zip": { "type": "string" },
+          "country": { "type": "string" },
+          "isDefault": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}
