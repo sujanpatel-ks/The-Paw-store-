@@ -60,7 +60,7 @@ export default function Storefront({
         {/* Background Image with elegant overlay */}
         <div className="absolute inset-0">
           <img
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbC3INTwpOwZnnMePrfmTGTnARv6ZeFmTH1OZQDjmgjIdhRPDVu0PikZ8ZrycElGwVReL5ZblQxfXJlbHhLmSklR3SFPVlGFdtl4I1yyM5Z-JkfqgIm4toOsIIs__A8v8BDYZ9ZDNBOdWOeVuZihBXvs7QM4zUiO5Hjb1IU0gbFmr9yY3t3MHi3LWtKHv3NB-oB0Mi0jQKvELLDTKOD_aijsaB4nzGqnXnQvI_suJxKC68HSW41g"
+            src="/storefront/hero.jpg"
             alt="Elegant Weimaraner in modern home"
             className="w-full h-full object-cover opacity-60 object-center transition-transform duration-[10000ms] hover:scale-105"
             referrerPolicy="no-referrer"
@@ -124,7 +124,7 @@ export default function Storefront({
           >
             <div className="absolute inset-0">
               <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLMogCjspMQGpq9Uxb4UtdJveNvwS2NaCRcrK7_7V6n6e4KREI-J8Qq-q8TE_tmtmKXAFGeOMj_KgNdBu7yJIdZULDlZRm92U1zVnIIeoaFIbKxtvGUGNPBPuEgxBg-IzmyOrevZfDXB_Zz_kd8R3CxSJXTFJEq4Qzn0zdeVz8yEEtTQ2Vis5acxTLlkhiI48NtWANDCV-RWsT_MA43DksobLEFtM8RXoRPcmmyMWeFnd1TnSFBg"
+                src="/storefront/dogs.jpg"
                 alt="Dogs Collection"
                 className="w-full h-full object-cover transition-transform duration-[6000ms] group-hover:scale-110 object-center"
                 referrerPolicy="no-referrer"
@@ -154,7 +154,7 @@ export default function Storefront({
           >
             <div className="absolute inset-0">
               <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDibugVNyDUxXk1MOp4ptZTx1gT5En2aPzr08oAZAfejPKZi82NxYqW07WAHxiElq3yhahvehLXjG4cNFM19xYVZG6sBDaA3LwgnycWKg8HD4uy1F7YY8cZFmpgJMQ1rtd4WsGu2o9Uvqk_Q4NbCvlrqOH8FLaSdrEuLPuK_PaKbbDGIlGhpzX-T96niS6aQA0wOn9ZXfCpRgC5ZXIC2sQ5DJZaYtEY7LawkyttR4aNjbtWDmRoGg"
+                src="/storefront/cats.jpg"
                 alt="Cats Collection"
                 className="w-full h-full object-cover transition-transform duration-[6000ms] group-hover:scale-110 object-center"
                 referrerPolicy="no-referrer"
@@ -184,7 +184,7 @@ export default function Storefront({
           >
             <div className="absolute inset-0">
               <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEZjd1Xvcn9i1U2O2KhStFpADgoA4sSQOFBNSo06Aa_YFaMhtBeAaSs7ki3AAvPSrDLb84fVJRtTIDg5Fx0ydcK5vm1ghN-wKt4zvkbiPlOlTtzcWnk2T55fdQYgQOVeFPtusdppcylq5Dek4__hgHVmshEN_9AbIqMCvm-SGIaB4pEFU-t_nwQjjRgTnBFcwIJmqXfQteeIWC_c0tjcyv379TEwQxDCyMTdEaAVDlYQTIc4063g"
+                src="/storefront/new-arrivals.jpg"
                 alt="New Arrivals"
                 className="w-full h-full object-cover transition-transform duration-[6000ms] group-hover:scale-110 object-center"
                 referrerPolicy="no-referrer"
@@ -214,7 +214,7 @@ export default function Storefront({
           >
             <div className="absolute inset-0">
               <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF3uGrLdueaQG7d2V0Uh2msZKqZRmOiIyaik86HKaiNXCUpAfLoxH9tlFkg2DV6c4vXePqOp21uTAQy9EJeHjwdyxR1YIIE_WczbRCqt4_yhtSpeozvrYw5-urCKIP6hDX8ZDd7atTY0-0dIhoeWLLJ7y2P2IDo-hsXSKO4KV1v-R8bSXLjhpwUfLp4VjJnWmo9sysMTxcHYhcRqEfzIThuB7sBbgjayd0o17hKoZnNwGY-E319A"
+                src="/storefront/eco-friendly.jpg"
                 alt="Eco Friendly"
                 className="w-full h-full object-cover transition-transform duration-[6000ms] group-hover:scale-110 object-center"
                 referrerPolicy="no-referrer"
